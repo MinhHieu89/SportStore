@@ -1,6 +1,8 @@
+import { Cart } from './../models/cart.model';
 import { Product } from 'app/models/product.model';
 import { ProductRepository } from './../models/product.repository';
 import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'store',
@@ -13,7 +15,10 @@ export class StoreComponent {
   pageSize = 4;
   currentPage = 1;
 
-  constructor(private repository: ProductRepository) { }
+  constructor(
+    private router: Router,
+    private cart: Cart,
+    private repository: ProductRepository) { }
 
   get products(): Product[] {
     let pageIndex = (this.currentPage - 1) * this.pageSize;
@@ -44,10 +49,9 @@ export class StoreComponent {
       .getProducts(this.selectedCategory).length / this.pageSize)
   }
 
-  // get pageNumbers(): number[] {
-  //   return Array(Math.ceil(this.repository
-  //     .getProducts(this.selectedCategory).length / this.pageSize))
-  //     .fill(0).map((x, i) => i + 1);
-  // }
+  addProductToCart(product: Product) {
+    this.cart.addLine(product);
+    // this.router.navigateByUrl("/cart");
+  }
 
 }
